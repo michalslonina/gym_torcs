@@ -311,6 +311,7 @@ OpenalTorcsSound::OpenalTorcsSound(const char* filename, OpenalSoundInterface* s
 
 	//printf("SOUND, create source: %s -> %s\n", filename, (static_pool == true) ? "static" : "dynamic");
 
+#ifdef SOUNT_ENABLE
 	int error = alGetError();
 	if (error != AL_NO_ERROR) {
 		printf("Uncatched OpenAL Error on entry: %d with file %s\n", error, filename);
@@ -419,10 +420,12 @@ OpenalTorcsSound::OpenalTorcsSound(const char* filename, OpenalSoundInterface* s
 	if (error != AL_NO_ERROR) {
 		printf("OpenAL Error: %d, alSourcef AL_GAIN %s\n", error, filename);
 	}
+#endif SOUNT_ENABLE
 }
 
 OpenalTorcsSound::~OpenalTorcsSound()
 {
+#ifdef SOUNT_ENABLE
 	if (alIsSource(source)) {
 		alSourceStop (source);
 		alDeleteSources(1, &source);
@@ -430,6 +433,7 @@ OpenalTorcsSound::~OpenalTorcsSound()
 	if (alIsBuffer(buffer)) {
 		alDeleteBuffers(1, &buffer);
 	}
+#endif SOUNT_ENABLE
 }
 
 void OpenalTorcsSound::setVolume (float vol)
@@ -450,6 +454,7 @@ void OpenalTorcsSound::setLPFilter(float lp)
 
 void OpenalTorcsSound::setReferenceDistance(float dist)
 {
+#ifdef SOUNT_ENABLE
 	if (static_pool) {
 		if (is_enabled) {
 			alSourcef (source, AL_REFERENCE_DISTANCE, dist);
@@ -460,6 +465,7 @@ void OpenalTorcsSound::setReferenceDistance(float dist)
 			REFERENCE_DISTANCE = dist;
 		}
 	}
+#endif SOUNT_ENABLE
 }
 
 
@@ -488,6 +494,7 @@ void OpenalTorcsSound::play()
 
 void OpenalTorcsSound::start()
 {
+#ifdef SOUNT_ENABLE
 	if (static_pool) {
 		if (is_enabled) {
 			if (playing==false) {
@@ -522,11 +529,13 @@ void OpenalTorcsSound::start()
 			}
 		}
 	}
+#endif SOUNT_ENABLE
 }
 
 
 void OpenalTorcsSound::stop()
 {
+#ifdef SOUNT_ENABLE
 	if (static_pool) {
 		if (is_enabled) {
 			if (playing==true) {
@@ -543,6 +552,7 @@ void OpenalTorcsSound::stop()
 			}
 		}
 	}
+#endif SOUNT_ENABLE
 }
 
 void OpenalTorcsSound::resume()
@@ -562,6 +572,7 @@ void OpenalTorcsSound::pause()
 
 void OpenalTorcsSound::update ()
 {
+#ifdef SOUNT_ENABLE
     ALfloat zero_velocity[3] = {0.0f, 0.0f, 0.0f};
 	if (static_pool) {
 		if (is_enabled) {
@@ -578,6 +589,7 @@ void OpenalTorcsSound::update ()
 			alSourcef (source, AL_GAIN, volume);		
 		}
 	}
+#endif SOUNT_ENABLE
 }
 
 
